@@ -10,6 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using ModeloDDD.Infra.Data;
+using ModeloDDD.Domain.Repositories;
+using ModeloDDD.Infra.Repositories;
 
 namespace ModeloDDD.API
 {
@@ -25,6 +29,10 @@ namespace ModeloDDD.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+            services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("ModeloDDD"));
+            // services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));            
+            services.AddTransient<IUsuarioRepository, UsuarioRepository>();
             services.AddControllers();
         }
 
