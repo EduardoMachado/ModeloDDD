@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ModeloDDD.Business\ModeloDDD.Business.csproj" />
     <ProjectReference Include="..\ModeloDDD.Infra\ModeloDDD.Infra.csproj" />
   </ItemGroup>
 

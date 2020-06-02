@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using ModeloDDD.Infra.Data;
 using ModeloDDD.Domain.Repositories;
 using ModeloDDD.Infra.Repositories;
+using ModeloDDD.Domain.Contracts.Services;
+using ModeloDDD.Business.Services;
 
 namespace ModeloDDD.API
 {
@@ -31,8 +33,9 @@ namespace ModeloDDD.API
         {
             services.AddControllers();
             services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("ModeloDDD"));
-            // services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));            
+            services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));            
             services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+            services.AddTransient<IUsuarioService, UsuarioService>();
             services.AddControllers();
         }
 

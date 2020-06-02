@@ -18,7 +18,8 @@ namespace ModeloDDD.Infra.Repositories
 
         public void Create(Usuario user)
         {
-            throw new NotImplementedException();
+            _context.Add(user);
+            _context.SaveChanges();
         }
 
         public void Delete(Usuario user)
@@ -28,10 +29,10 @@ namespace ModeloDDD.Infra.Repositories
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _context.Dispose();
         }
 
-        public Usuario Get(string email)
+        public IEnumerable<Usuario> Get(string email)
         {
             throw new NotImplementedException();
         }
@@ -42,6 +43,11 @@ namespace ModeloDDD.Infra.Repositories
         }
 
         public void Update(Usuario user)
+        {
+            throw new NotImplementedException();
+        }
+
+        Usuario IUsuarioRepository.Get(string email)
         {
             throw new NotImplementedException();
         }
