@@ -5,13 +5,17 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using ModeloDDD.Domain.Contracts.Services;
+using ModeloDDD.Domain.DTOs;
 using ModeloDDD.Domain.Entities;
 
 namespace ModeloDDD.API.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
-    public class UsuarioController : Controller
+    public class UsuarioController : ControllerBase
     {
         private IUsuarioService _service;
 
@@ -35,24 +39,22 @@ namespace ModeloDDD.API.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public Usuario Register(usuarioDTO user)
+        public async Task<ActionResult<Usuario>> Register([FromBody] UsuarioDTO usuario)
         {
-            HttpResponseMessage response = new HttpResponseMessage();
+            var user = new Usuario(usuario.Nome, usuario.Email, usuario.Password);
+            if (!user.Valid)
+                return BadRequest(user.Notifications);
 
-           //var usuario = _service.Register(name, email, senha, confirmacaoSenha);
-
-            return new Usuario("t","t","t");
-        }
-
-
-        
-
-        public class usuarioDTO
-        {
-            public string  name { get; set; }
-            public string email { get; set; }
-            public string senha { get; set; }
-            public string confirmacaoSenha  { get; set; }
+            try
+            {
+                await _service.Register(user);
+                user.HidePassword();
+                return user;
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível registrar o usuário.");
+            }
         }
     }
 }

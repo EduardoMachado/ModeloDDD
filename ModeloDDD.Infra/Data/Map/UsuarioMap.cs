@@ -13,6 +13,7 @@ namespace ModeloDDD.Infra.Data.Map
         {
             builder.HasKey(e => e.UsuarioId);
             builder.Property(e => e.Nome).HasMaxLength(300);
+            builder.HasIndex(e => e.Email).IsUnique();
         }
     }
 }

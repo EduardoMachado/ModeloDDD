@@ -3,7 +3,9 @@ using ModeloDDD.Domain.Repositories;
 using ModeloDDD.Infra.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ModeloDDD.Infra.Repositories
 {
@@ -16,10 +18,11 @@ namespace ModeloDDD.Infra.Repositories
             _context = context;
         }
 
-        public void Create(Usuario user)
+        public async Task<Usuario> Create(Usuario user)
         {
             _context.Add(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+            return user;
         }
 
         public void Delete(Usuario user)
@@ -34,7 +37,7 @@ namespace ModeloDDD.Infra.Repositories
 
         public IEnumerable<Usuario> Get(string email)
         {
-            throw new NotImplementedException();
+            return _context.Usuario.Where(e => e.Email == email);
         }
 
         public Usuario Get(Guid id)
@@ -43,11 +46,6 @@ namespace ModeloDDD.Infra.Repositories
         }
 
         public void Update(Usuario user)
-        {
-            throw new NotImplementedException();
-        }
-
-        Usuario IUsuarioRepository.Get(string email)
         {
             throw new NotImplementedException();
         }

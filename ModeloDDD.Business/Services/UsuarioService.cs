@@ -3,7 +3,9 @@ using ModeloDDD.Domain.Entities;
 using ModeloDDD.Domain.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ModeloDDD.Business.Services
 {
@@ -35,18 +37,22 @@ namespace ModeloDDD.Business.Services
             _repository.Dispose();
         }
 
-        public Usuario GetByEmail(string email)
+        public IEnumerable<Usuario> GetByEmail(string email)
         {
-            throw new NotImplementedException();
+            return _repository.Get(email);
         }
 
-        public Usuario Register(string name, string email, string password, string confirmPassword)
+        public async Task<Usuario> Register(Usuario usuario)
         {
-            Usuario u = new Usuario(name, email, password);
-            _repository.Create(u);
-            return u;
-
-
+            if (GetByEmail(usuario.Email).Any())
+            {
+                usuario.AddNotification("E-mail", "E-mail informado já está cadastrado.");
+                return usuario;
+            }
+            else
+            {
+                return await _repository.Create(usuario);
+            }
         }
 
         public string ResetPassword(string email)
