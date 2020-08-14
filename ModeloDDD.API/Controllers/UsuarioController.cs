@@ -23,13 +23,6 @@ namespace ModeloDDD.API.Controllers
         {
             _service = service;
         }
-        //private readonly ILogger<WeatherForecastController> _logger;
-
-        //public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        //{
-        //    _logger = logger;
-        //}
-
 
         [HttpPost]
         public string Get()
