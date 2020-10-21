@@ -4,6 +4,7 @@ using ModeloDDD.Domain.ValueObjects;
 using ModeloDDD.Shared.Entities;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -12,6 +13,10 @@ namespace ModeloDDD.Domain.Entities
 {
     public class Usuario : Entity
     {
+        public Usuario()
+        {
+
+        }
         public Usuario(string nome, string email, string password)
         {
             Nome = nome;
@@ -35,6 +40,7 @@ namespace ModeloDDD.Domain.Entities
         public string Nome { get; private set; }
         public string Email { get; private set; }
         public string Password { get; private set; }
+        public string Role { get; set; }
 
         public void HidePassword()
         {

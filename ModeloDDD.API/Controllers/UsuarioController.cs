@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using ModeloDDD.API.Services;
 using ModeloDDD.Domain.Contracts.Services;
 using ModeloDDD.Domain.DTOs;
 using ModeloDDD.Domain.Entities;
@@ -24,6 +27,7 @@ namespace ModeloDDD.API.Controllers
             _service = service;
         }
 
+        [Authorize]
         [HttpPost]
         public string Get()
         {
@@ -44,10 +48,44 @@ namespace ModeloDDD.API.Controllers
                 user.HidePassword();
                 return user;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest("Não foi possível registrar o usuário.");
+                return BadRequest("Não foi possível registrar o usuário." + ex.Message);
             }
+        }
+
+        [HttpPost]
+        [Route("Authenticate")]
+        public async Task<ActionResult<dynamic>> Authenticate([FromBody] UsuarioDTO usuario)
+        {
+            try
+            {
+                // Recupera o usuário
+                var user = await _service.Authenticate(usuario.Email, usuario.Password);
+
+                // Verifica se o usuário existe
+                if (user == null)
+                    return NotFound(new { message = "Usuário ou senha inválidos" });
+
+                // Gera o Token
+                var token = TokenService.GenerateToken(user);
+
+                // Oculta a senha
+                usuario.Password = "";
+
+                // Retorna os dados
+                return new
+                {
+                    user,
+                    token
+                };
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Não foi possível registrar o usuário. " + ex.Message);
+            }
+
+           
         }
     }
 }

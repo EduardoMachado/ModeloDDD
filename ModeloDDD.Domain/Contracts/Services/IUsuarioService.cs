@@ -8,8 +8,8 @@ namespace ModeloDDD.Domain.Contracts.Services
 {
     public interface IUsuarioService : IDisposable
     {
-        Usuario Authenticate(string email, string password);
-        IEnumerable<Usuario> GetByEmail(string email);
+        Task<Usuario> Authenticate(string email, string password);
+        Task<IEnumerable<Usuario>> GetByEmail(string email);
         Task<Usuario> Register(Usuario user);
         void ChangeInformation(string email, string name);
         void ChangePassword(string email, string password, string newPassword, string confirmNewPassword);
